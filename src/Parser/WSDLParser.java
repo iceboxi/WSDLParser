@@ -1,5 +1,7 @@
 package Parser;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -10,43 +12,64 @@ import nu.xom.ValidityException;
 
 
 public class WSDLParser {
-	public void parser(String path) {
+	private String partnerLink;
+	private Element rootElement;
+	private List<Operation> operationInfos;
+	
+	public WSDLParser(String path) {
 		try {
 			Document document = new Builder().build(path);
+			rootElement = document.getRootElement();
 			
-			Element rootElement = document.getRootElement();
-			
-			Element portTypeElement = rootElement.getFirstChildElement("portType", rootElement.getNamespaceURI());
-			System.out.println("portType = " + portTypeElement.getAttributeValue("name"));
-			
-			Element operationElement = portTypeElement.getFirstChildElement("operation", portTypeElement.getNamespaceURI());
-			System.out.println("operation = " + operationElement.getAttributeValue("name"));
-			
-			Element inputElement = operationElement.getFirstChildElement("input", operationElement.getNamespaceURI());
-//			System.out.println(inputElement.getAttributeValue("message"));
-			
-			String message = inputElement.getAttributeValue("message").split(":")[1];
-//			System.out.println(message);
-			
-			Elements messageElements = rootElement.getChildElements("message", rootElement.getNamespaceURI());
-			for (int i = 0; i < messageElements.size(); i++) {
-				Element messageElement = messageElements.get(i);
-				if (messageElement.getAttributeValue("name").equals(message)) {
-					Element partElement = messageElement.getFirstChildElement("part", messageElement.getNamespaceURI());
-					System.out.println("inputName = " + partElement.getAttributeValue("type").split(":")[1]);
-				}
-			}
-			
-			
+			operationInfos = new ArrayList<Operation>();
+			partnerLink = path.substring(path.lastIndexOf("/") + 1);
 		} catch (ValidityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParsingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public List<Operation> getOperationInfos() {
+		return operationInfos;
+	}
+	
+	public void parser() {
+		Elements portTypeElements = rootElement.getChildElements("portType", rootElement.getNamespaceURI());
+		for (int i = 0; i < portTypeElements.size(); i++) {
+			Element portTypeElement = portTypeElements.get(i);
+			String portType = portTypeElement.getAttributeValue("name");
+			
+			Elements operationElements = portTypeElement.getChildElements("operation", portTypeElement.getNamespaceURI());
+			for (int j = 0; j < operationElements.size(); j++) {
+				Element operationElement = operationElements.get(j);
+				Operation operation = new Operation(partnerLink, portType);
+				operation.setOperation(operationElement.getAttributeValue("name"));
+				
+				Element inputElement = operationElement.getFirstChildElement("input", operationElement.getNamespaceURI());
+				String message = inputElement.getAttributeValue("message").split(":")[1];
+				
+				parserInputName(message, operation);
+				
+				operationInfos.add(operation);
+			}
+		}
+	}
+	
+	private void parserInputName(String message, Operation operation) {
+		Elements messageElements = rootElement.getChildElements("message", rootElement.getNamespaceURI());
+		for (int i = 0; i < messageElements.size(); i++) {
+			Element messageElement = messageElements.get(i);
+			if (messageElement.getAttributeValue("name").equals(message)) {
+				Elements partElements = messageElement.getChildElements("part", messageElement.getNamespaceURI());
+					
+				for (int j = 0; j < partElements.size(); j++) {
+					Element partElement = partElements.get(i);
+					operation.addInput(partElement.getAttributeValue("type").split(":")[1]);
+				}
+			}
 		}
 	}
 }

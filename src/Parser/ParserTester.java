@@ -1,5 +1,5 @@
 package Parser;
-import static org.junit.Assert.*;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +18,11 @@ public class ParserTester {
 
 	@Test
 	public void test() {
-		WSDLParser parser = new WSDLParser();
-		parser.parser("wsdl/WatchingMovie_Movie.wsdl");
+		WSDLParser parser = new WSDLParser("wsdl/WatchingMovie_Movie.wsdl");
+		parser.parser();
+		
+		List<Operation> infos = parser.getOperationInfos();
+		System.out.println(new BPELWriter().writeString(infos));
 	}
 
 }

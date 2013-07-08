@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://test.org/Service" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" name="Service" targetNamespace="http://test.org/Service">
+  <wsdl:message name="movieShowtimeSearch">
+    <wsdl:part name="argument" type="xsd:movieShowtimeType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="movieShowtimeSearchResult">
+    <wsdl:part name="argument" type="xsd:movieShowtimeSearchResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="movieShowtimeSearch">
+      <wsdl:input name="movieShowtimeSearchRequest" message="tns:movieShowtimeSearch">
+    </wsdl:input>
+      <wsdl:output name="movieShowtimeSearchResponse" message="tns:movieShowtimeSearchResult">
+    </wsdl:output>
+</wsdl:operation>
+  </wsdl:portType>
+<wsdl:types><xsd:schema version="OWLS2WSDL Wed Sep 22 14:35:25 CEST 2010" xsd="http://www.w3.org/2001/XMLSchema"><xsd:complexType><xsd:sequence><xsd:element name="movieShowtimeType" type="movieShowtimeType" /></xsd:sequence></xsd:complexType><xsd:complexType><xsd:sequence><xsd:element name="data" type="data" /></xsd:sequence></xsd:complexType></xsd:schema></wsdl:types></wsdl:definitions>

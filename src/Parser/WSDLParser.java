@@ -64,9 +64,9 @@ public class WSDLParser {
 			Element messageElement = messageElements.get(i);
 			if (messageElement.getAttributeValue("name").equals(message)) {
 				Elements partElements = messageElement.getChildElements("part", messageElement.getNamespaceURI());
-					
+				
 				for (int j = 0; j < partElements.size(); j++) {
-					Element partElement = partElements.get(i);
+					Element partElement = partElements.get(j);
 					operation.addInput(partElement.getAttributeValue("type").split(":")[1]);
 				}
 			}

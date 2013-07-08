@@ -1,4 +1,5 @@
 package Parser;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -18,11 +19,21 @@ public class ParserTester {
 
 	@Test
 	public void test() {
-		WSDLParser parser = new WSDLParser("wsdl/WatchingMovie_Movie.wsdl");
-		parser.parser();
+		List<String> paths = new ArrayList<String>();
+		paths.add("wsdl/WatchingMovie_Movie.wsdl");
+		paths.add("wsdl/WatchingMovie_Showtime.wsdl");
+		paths.add("wsdl/WatchingMovie_Theater.wsdl");
 		
-		List<Operation> infos = parser.getOperationInfos();
-		System.out.println(new BPELWriter().writeString(infos));
+		BPELWriter writer = new BPELWriter();
+		for (String string : paths) {
+			WSDLParser parser = new WSDLParser(string);
+			parser.parser();
+			
+			List<Operation> infos = parser.getOperationInfos();
+			writer.addElements(infos);
+		}
+		
+		System.out.println(writer.getXMLString());
 	}
 
 }

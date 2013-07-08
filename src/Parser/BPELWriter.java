@@ -6,16 +6,31 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 
 public class BPELWriter {	
-	public String writeString(List<Operation> operations) {
-		Element rootElement = new Element("sequence");
+	private Element rootElement;
+	
+	public BPELWriter() {
+		rootElement = new Element("sequence");
+	}
+	
+	public BPELWriter(Element rootElement) {
+		this.rootElement = rootElement;
+	}
+	
+	public void addElement(Operation operation) {
+		rootElement.appendChild(writeOperation(operation));
+	}
+	
+	public void addElements(List<Operation> operations) {
 		for (Operation operation : operations) {
-			rootElement.appendChild(writeOperation(operation));
+			addElement(operation);
 		}
-		
+	}
+	
+	public String getXMLString() {
 		return rootElement.toXML();
 	}
 	
-	public Element writeOperation(Operation operation) {
+	private Element writeOperation(Operation operation) {
 		Element element = new Element("invoke");
 		element.addAttribute(new Attribute("partnerLink", operation.getPartnerLink()));
 		element.addAttribute(new Attribute("portType", operation.getPortType()));

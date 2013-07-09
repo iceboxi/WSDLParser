@@ -31,7 +31,7 @@ public class ParserTester {
 			parser.parser();
 			
 			List<Operation> infos = parser.getOperationInfos();
-			writer.addElements(infos);
+			writer.appendElementList(infos);
 		}
 		
 		System.out.println(writer.getXMLString());
@@ -43,7 +43,7 @@ public class ParserTester {
 		parser.parser();
 		
 		BPELWriter writer = new BPELWriter();
-		writer.addElements(parser.getOperationInfos());
+		writer.appendElementList(parser.getOperationInfos());
 		
 		System.out.println(writer.getXMLString());
 	}
@@ -54,7 +54,7 @@ public class ParserTester {
 		parser.parser();
 		
 		BPELWriter writer = new BPELWriter();
-		writer.addElements(parser.getOperationInfos());
+		writer.appendElementList(parser.getOperationInfos());
 		
 		Assert.assertTrue(writer.writeToFile("bpel/test1.txt"));
 	}

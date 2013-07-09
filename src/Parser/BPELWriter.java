@@ -16,13 +16,13 @@ public class BPELWriter {
 		this.rootElement = rootElement;
 	}
 	
-	public void addElement(Operation operation) {
+	public void appendElement(Operation operation) {
 		rootElement.appendChild(writeOperation(operation));
 	}
 	
-	public void addElements(List<Operation> operations) {
+	public void appendElementList(List<Operation> operations) {
 		for (Operation operation : operations) {
-			addElement(operation);
+			appendElement(operation);
 		}
 	}
 	

@@ -30,6 +30,11 @@ public class BPELWriter {
 		return rootElement.toXML();
 	}
 	
+	public boolean writeToFile(String filename) {
+		WriteFile write = new WriteFile();
+		return write.writeText(getXMLString(), filename, "utf8", false);
+	}
+	
 	private Element writeOperation(Operation operation) {
 		Element element = new Element("invoke");
 		element.addAttribute(new Attribute("partnerLink", operation.getPartnerLink()));

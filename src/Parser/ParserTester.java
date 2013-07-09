@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class ParserTester {
 	}
 
 	@Test
-	public void test() {
+	public void testList() {
 		List<String> paths = new ArrayList<String>();
 		paths.add("wsdl/WatchingMovie_Movie.wsdl");
 		paths.add("wsdl/WatchingMovie_Showtime.wsdl");
@@ -36,4 +37,25 @@ public class ParserTester {
 		System.out.println(writer.getXMLString());
 	}
 
+	@Test
+	public void testSingle() {
+		WSDLParser parser = new WSDLParser("wsdl/WatchingMovie_Movie.wsdl");
+		parser.parser();
+		
+		BPELWriter writer = new BPELWriter();
+		writer.addElements(parser.getOperationInfos());
+		
+		System.out.println(writer.getXMLString());
+	}
+	
+	@Test
+	public void testWriteFile() {
+		WSDLParser parser = new WSDLParser("wsdl/WatchingMovie_Movie.wsdl");
+		parser.parser();
+		
+		BPELWriter writer = new BPELWriter();
+		writer.addElements(parser.getOperationInfos());
+		
+		Assert.assertTrue(writer.writeToFile("bpel/test1.txt"));
+	}
 }
